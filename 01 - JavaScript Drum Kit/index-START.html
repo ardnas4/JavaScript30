@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>JS Drum Kit</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="https://fav.farm/🔥" />
+  <link rel="icon" href="https://fav.farm/✅" />
 </head>
 <body>
 
@@ -59,7 +59,45 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  // make effect disappear after a certain amount of time (the transition time in .css)
+  function removeTransition(e) {
+    // propertyName: the name of the CSS property associated with the transition, when a transitionevent occurs
+    // if there is no tranformation, don't do anything
+    if (e.propertyName !== 'transform') return;
 
+    // otherwise, stop the transformation by removing the playing class
+    e.target.classList.remove('playing');
+  }
+
+  // plays a sound when a button is pushed
+  function playSound(e) {
+    // get audio tag correlated to the key you just pushed
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    
+    // gets the div element correlated to the key pushed 
+    const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
+    
+    // if no valid key pushed, then stop function from running
+    if (!audio) return;
+
+    // add playing class to highlight the pushed key in yellow
+    key.classList.add('playing');
+
+    // rewind from the start to allow button spamming
+    audio.currentTime = 0;
+
+    // play the audio
+    audio.play();
+  }
+
+  // select all valid keys
+  const keys = Array.from(document.querySelectorAll('.key'));
+
+  // add a listener for each key for the transitionend event (occurs when a CSS transition has completed)
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+  
+  // listens to when key is pushed down to play sound
+  window.addEventListener('keydown', playSound);
 </script>
 
 
